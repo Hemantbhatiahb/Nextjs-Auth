@@ -1,16 +1,18 @@
 "use client";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 
 function SignupPage() {
+  const router = useRouter();
   const [user, setUser] = useState({
     username: "",
     email: "",
     password: "",
   });
   const [buttonDisabled, setButtonDisabled] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (
@@ -26,6 +28,17 @@ function SignupPage() {
 
   const onSignup = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    try {
+      setLoading(true);
+      const response = await axios.post("/api/users/signup", user);
+      console.log("Signup success",await response.data);
+      router.push("/login");
+    } catch (err: any) {
+      console.log("Signup failed", err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -34,7 +47,9 @@ function SignupPage() {
         onSubmit={onSignup}
         className="flex  flex-col w-[60%] max-w-md  p-6 lg:p-8 shadow-xl rounded-lg ring-1 ring-slate-200 gap-4 lg:items-start "
       >
-        <h1 className="text-lg font-semibold mb-2 self-center">Signup</h1>
+        <h1 className="text-lg font-semibold mb-2 self-center">
+          {loading ? "Processing..." : "Signup"}
+        </h1>
         <div className=" flex flex-col gap-2 text-sm lg:flex-row lg:items-center lg:gap-4 lg:w-full">
           <label htmlFor="username" className="flex-[20%]">
             {" "}
@@ -82,9 +97,10 @@ function SignupPage() {
         <button
           type="submit"
           className={`mt-4 self-center px-3 py-2 border-2 rounded-md bg-gray-100 font-medium text-[14px] hover:scale-110 hover:bg-gray-200 transition ease-in-out active:opacity-75 focus:outline-none ${
-            buttonDisabled ? "cursor-not-allowed hover:scale-100" : "cursor-pointer"
+            buttonDisabled
+              ? "cursor-not-allowed hover:scale-100"
+              : "cursor-pointer"
           }`}
-          disabled={buttonDisabled}
         >
           Signup here
         </button>

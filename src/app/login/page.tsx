@@ -1,18 +1,40 @@
 "use client";
 
-import React from "react";
-import { axios } from "axios";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 function LoginPage() {
-  const [user, setUser] = React.useState({
+  const router = useRouter();
+  const [user, setUser] = useState({
     email: "",
     password: "",
   });
+  const [loading, setLoading] = useState(false);
+  const [buttonDisabled, setButtonDisabled] = useState(true);
+
+  useEffect(() => {
+    if (user.email.trim().includes("@") && user.password.trim().length > 4) {
+      setButtonDisabled(false);
+    } else {
+      setButtonDisabled(true);
+    }
+  }, [user]);
 
   const onLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    try {
+      setLoading(true);
+      const response = await axios.post("/api/users/login", user);
+      console.log("Login successful", response.data);
+      router.push("/profile");
+    } catch (err: any) {
+      console.log("Login Failed", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -21,7 +43,9 @@ function LoginPage() {
         onSubmit={onLogin}
         className="flex  flex-col w-[60%] max-w-md  p-6 lg:p-8 shadow-xl rounded-lg ring-1 ring-slate-200 gap-4 lg:items-start "
       >
-        <h1 className="text-lg font-semibold mb-2 self-center">Login</h1>
+        <h1 className="text-lg font-semibold mb-2 self-center">
+          {loading ? "Processing.." : "Login"}
+        </h1>
         <div className=" flex flex-col gap-2 text-sm lg:flex-row lg:items-center lg:gap-4 lg:w-full">
           <label htmlFor="email" className="flex-[20%]">
             email
@@ -53,13 +77,23 @@ function LoginPage() {
 
         <button
           type="submit"
-          className="cursor-pointer mt-4 self-center px-3 py-2 border-2 rounded-md bg-gray-100 font-medium text-[14px] hover:scale-110 hover:bg-gray-200 transition ease-in-out active:opacity-75 focus:outline-none"
+          className={`mt-4 self-center px-3 py-2 border-2 rounded-md bg-gray-100 font-medium text-[14px] hover:scale-110 hover:bg-gray-200 transition ease-in-out active:opacity-75 focus:outline-none ${
+            buttonDisabled
+              ? "cursor-not-allowed hover:scale-100"
+              : "cursor-pointer"
+          }`}
         >
           Login here
         </button>
 
         <div className="self-center mt-2 text-sm text-gray-700">
-          You don&apos;t have an account?<Link href='/signup' className="ml-2 no-underlin hover:underline text-blue-700">Signup</Link>
+          You don&apos;t have an account?
+          <Link
+            href="/signup"
+            className="ml-2 no-underlin hover:underline text-blue-700"
+          >
+            Signup
+          </Link>
         </div>
       </form>
     </div>
