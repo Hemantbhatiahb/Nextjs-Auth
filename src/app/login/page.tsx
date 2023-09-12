@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import toast, { Toaster } from "react-hot-toast";
 
 function LoginPage() {
   const router = useRouter();
@@ -24,14 +25,16 @@ function LoginPage() {
 
   const onLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
+    
     try {
       setLoading(true);
       const response = await axios.post("/api/users/login", user);
       console.log("Login successful", response.data);
+      toast.success("Successfully created!");
       router.push("/profile");
     } catch (err: any) {
-      console.log("Login Failed", err);
+      toast.error(err.message);
+      console.log("Login Failed", err.message);
     } finally {
       setLoading(false);
     }
@@ -39,6 +42,7 @@ function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center">
+      <Toaster position="top-center" reverseOrder={false} />
       <form
         onSubmit={onLogin}
         className="flex  flex-col w-[60%] max-w-md  p-6 lg:p-8 shadow-xl rounded-lg ring-1 ring-slate-200 gap-4 lg:items-start "
