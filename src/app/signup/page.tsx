@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import toast, { Toaster } from "react-hot-toast";
 
 function SignupPage() {
   const router = useRouter();
@@ -32,9 +33,11 @@ function SignupPage() {
     try {
       setLoading(true);
       const response = await axios.post("/api/users/signup", user);
-      console.log("Signup success",await response.data);
+      console.log("Signup success", await response.data);
+      toast.success("Signup successful");
       router.push("/login");
     } catch (err: any) {
+      toast.error(err.message);
       console.log("Signup failed", err.message);
     } finally {
       setLoading(false);
@@ -43,6 +46,7 @@ function SignupPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center">
+      <Toaster position="top-center" reverseOrder={false} />
       <form
         onSubmit={onSignup}
         className="flex  flex-col w-[60%] max-w-md  p-6 lg:p-8 shadow-xl rounded-lg ring-1 ring-slate-200 gap-4 lg:items-start "

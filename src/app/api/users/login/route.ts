@@ -3,7 +3,6 @@ import User from "@/models/userModel";
 import { NextRequest, NextResponse } from "next/server";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
-
 connect();
 
 export async function POST(request: NextRequest) {
@@ -17,18 +16,21 @@ export async function POST(request: NextRequest) {
     const user = await User.findOne({ email });
 
     if (!user) {
-      return NextResponse.json({ error: "User not found", status: 400 });
+      return NextResponse.json(
+        { error: "User does not exist" },
+        { status: 400 }
+      );
     }
-    console.log('user exists');
+    console.log("user exists");
 
     //check if password is correct
     const validPassword = await bcryptjs.compare(password, user.password);
 
     if (!validPassword) {
-      return NextResponse.json({ error: "Invalid password", status: 400 });
+      return NextResponse.json({ error: "Invalid password" }, { status: 400 });
     }
 
-    console.log(user)
+    console.log(user);
     // create token data
     const tokenData = {
       id: user._id,
@@ -50,6 +52,6 @@ export async function POST(request: NextRequest) {
 
     return response;
   } catch (err: any) {
-    return NextResponse.json({ error: err.message, status: 500 });
+    return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
