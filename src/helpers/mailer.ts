@@ -36,9 +36,9 @@ export const sendEmail = async ({ email, emailType, userId }: any) => {
 
     let linkUrl = ""
     if(emailType === "VERIFY") {
-      linkUrl = `${process.env.DOMAIN}/verifyemail/?token=${hashedToken}`
+      linkUrl = `https://nextjsauth2023.vercel.app/verifyemail/?token=${hashedToken}`
       } else {
-        linkUrl = `${process.env.DOMAIN}/updatepassword/?token=${hashedToken}`
+        linkUrl = `https://nextjsauth2023.vercel.app/updatepassword/?token=${hashedToken}`
       }
  
     const emailOptions = {
