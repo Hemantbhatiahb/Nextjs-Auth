@@ -2,8 +2,10 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 export default function UpdatePasswordPage() {
+  const router = useRouter();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [buttonDisabled, setButtonDisabled] = useState(true);
@@ -33,6 +35,7 @@ export default function UpdatePasswordPage() {
         confirmPassword,
       });
       toast.success("Password updated successfully");
+      router.push("/login");
     } catch (error: any) {
       toast.error(error.message);
       console.log(error.message);

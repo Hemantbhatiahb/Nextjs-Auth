@@ -33,8 +33,8 @@ function LoginPage() {
       toast.success("Successfully logged in!");
       router.push("/profile");
     } catch (err: any) {
-      toast.error(err.message);
-      console.log("Login Failed", err.message);
+      toast.error(err.response.data.error);
+      console.log("Login Failed", err);
     } finally {
       setLoading(false);
     }

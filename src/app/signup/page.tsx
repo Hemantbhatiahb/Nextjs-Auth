@@ -37,7 +37,7 @@ function SignupPage() {
       toast.success("Signup successful");
       router.push("/login");
     } catch (err: any) {
-      toast.error(err.message);
+      toast.error(err.response.data.error);
       console.log("Signup failed", err.message);
     } finally {
       setLoading(false);
