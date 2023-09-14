@@ -32,7 +32,7 @@ export default function UpdatePasswordPage() {
         password,
         confirmPassword,
       });
-      toast.success(response.data);
+      toast.success("Password updated successfully");
     } catch (error: any) {
       toast.error(error.message);
       console.log(error.message);
