@@ -78,10 +78,12 @@ function LoginPage() {
             onChange={(e) => setUser({ ...user, password: e.target.value })}
           />
         </div>
-
+        <div className="self-end">
+          <Link href='/sendmail' className="text-xs cursor-pointer text-blue-500 hover:text-blue-700">Forgot Password?</Link>
+        </div>
         <button
           type="submit"
-          className={`mt-4 self-center px-3 py-2 border-2 rounded-md bg-gray-100 font-medium text-[14px] hover:scale-110 hover:bg-gray-200 transition ease-in-out active:opacity-75 focus:outline-none ${
+          className={`mt-2 self-center px-3 py-2 border-2 rounded-md bg-gray-100 font-medium text-[14px] hover:scale-110 hover:bg-gray-200 transition ease-in-out active:opacity-75 focus:outline-none ${
             buttonDisabled
               ? "cursor-not-allowed hover:scale-100"
               : "cursor-pointer"

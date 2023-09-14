@@ -27,7 +27,7 @@ export default function SendEmailPage() {
         email: emailInput,
       });
       console.log("email sent successfully", response.data);
-      toast.success(response.data);
+      toast.success("email sent successfully");
       router.push("/login");
     } catch (error: any) {
       toast.error(error.message);

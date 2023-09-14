@@ -6,7 +6,6 @@ connect();
 
 export async function POST(request: NextRequest) {
   try {
-    console.log('iniside ')
     const reqBody = await request.json();
     const {email  } = reqBody;
       console.log(reqBody);
